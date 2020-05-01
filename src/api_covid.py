@@ -2,13 +2,7 @@ import requests as request, json
 
 class APICOVID():
     def __init__(self):
-        self.name ="APICOVID"
-
-    def getInfo(self, country):
-        stats = self.getStats()
-        globalStats = self.getGlobalStats()
-        indexCountry = self.getIndexOfCountry(globalStats['Summary'], country)
-        print(globalStats['TotalCases'], globalStats[ 'GlobalRecovered'], globalStats['GlobalDeaths'])
+        self.name ='APICOVID'
 
     def getStats(self):
         stats = request.get('https://api.covid19api.com/stats')
@@ -46,5 +40,18 @@ class APICOVID():
 
         return None
 
-    def getStatsOfCountry(self,globalStats, index):
-        return globalStats['Summary']['Countries'][index]
+    def getStatsOfCountry(self,stats, index):
+        return stats['Summary']['Countries'][index]
+
+    def printStats(self, statsCountry):
+        print('----------------------------')
+        for property in statsCountry:
+            print(property +": " + str(statsCountry[property]))
+        print('----------------------------')
+
+    def getInfo(self, country):
+        stats = self.getStats()
+        globalStats = self.getGlobalStats()
+        indexCountry = self.getIndexOfCountry(globalStats['Summary'], country)
+        statsCountry = self.getStatsOfCountry(globalStats, indexCountry)
+        self.printStats(statsCountry)
