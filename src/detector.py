@@ -1,17 +1,10 @@
 from experta import *
 
-class TestStart():
-    def startEngine(self):
-        engine = coronavirusDetector()
-        engine.reset()
-        print("Test to know if the user is infected with Covid-19")
-        engine.declare(Option(symptom=input("Which is your first symptom?")))
-        engine.run()
-
 class Option(Fact):
+    """Info about the COVID19"""
     pass
 
-class coronavirusDetector(KnowledgeEngine):
+class Detector(KnowledgeEngine):
 
     @Rule(Option(symptom=L("tos seca")
                        | L("dolor de cabeza")))
@@ -23,8 +16,8 @@ class coronavirusDetector(KnowledgeEngine):
     def another_symptom(self):
         print("Disnea, Artralgias, Nealgias, Ordinofagia, Rinorrea, Conjuntivitis, Dolor Torasico")
         self.declare(Option(symptom3=input("What other symptom do you have?")))
-        
-        
+
+
     @Rule(Option(symptom3=L("disnea")
                         | L("artralgias")
                         | L("nealgias")
