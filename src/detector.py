@@ -1,7 +1,6 @@
 from experta import *
 
 class Option(Fact):
-    """Info about the COVID19"""
     pass
 
 class Detector(KnowledgeEngine):
@@ -9,15 +8,15 @@ class Detector(KnowledgeEngine):
     @Rule(Option(symptom=L("tos seca")
                        | L("dolor de cabeza")))
     def second_symptom(self):
-        self.declare(Option(symptom2=input("Which is your second symptom?")))
+        self.declare(Option(symptom2=input("Which is your second symptom?").lower()))
 
     @Rule(Option(symptom2=L("dolor de cabeza")
                         | L("tos seca")))
     def another_symptom(self):
         print("Disnea, Artralgias, Nealgias, Ordinofagia, Rinorrea, Conjuntivitis, Dolor Torasico")
-        self.declare(Option(symptom3=input("What other symptom do you have?")))
-
-
+        self.declare(Option(symptom3=input("What other symptom do you have?").lower()))
+        
+        
     @Rule(Option(symptom3=L("disnea")
                         | L("artralgias")
                         | L("nealgias")

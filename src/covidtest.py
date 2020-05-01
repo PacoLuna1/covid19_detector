@@ -23,7 +23,6 @@ class CovidTest():
             print("1. Start test")
             print("2. Information about the Coronavirus Cases in México")
             print("3. Exit")
-            self.apicovid.getInfo("Mexico")
             print("============================================")
             opt = int(input())
             if(opt == 1):
