@@ -1,14 +1,57 @@
 # coding=utf-8
 #!/usr/bin/python
-from  src.__init__ import Detector, Option, APICOVID
-import time
-import os
+from  src.__init__ import *
 
 class CovidTest():
 
     def __init__(self):
         self.name = "CovidTest"
         self.apicovid = APICOVID()
+        self.globalStats = self.apicovid.getGlobalStats()
+
+
+    def cleanScreen(self):
+        os.system('clear')
+
+    def enterToContinue(self):
+        input(line + "Enter to continue...")
+        print(line)
+
+    def menu(self):
+        stay = True
+        invalidValue = red + "--> Please enter a valid value ✗" + RESET + line
+        validValue = green + "--> Valid value ✓" + RESET + line
+        opt1 = "1. Start test"
+        opt2 = "2. Information about the Coronavirus"
+        opt3 = "3. Worldwide cases"
+        opt0 = "0. Exit"
+        byebye= "See you soon! Stay at home, stay healthy! ❤️ "
+
+        while(stay):
+            print(yellow + "==== Welcome to the Corona Virus Detector ===" + RESET)
+            print(opt0 + line+ opt1 + line + opt2 + line + opt3)
+            print(yellow + "============================================" + RESET)
+            try:
+                opt = int(input("Select an option: "))
+                if(opt == 1):
+                    print(validValue)
+                    self.startEngine()
+                elif(opt == 2):
+                    print(validValue)
+                    self.consultInfo(invalidValue)
+                elif(opt == 3):
+                    print(validValue)
+                    self.consultWorldWide()
+                elif(opt == 0):
+                    print(validValue + byebye)
+                    stay = False
+                    self.enterToContinue()
+                else:
+                    print(invalidValue)
+            except:
+                print(invalidValue)
+                self.enterToContinue()
+                self.cleanScreen()
 
     def startEngine(self):
         engine = Detector()
@@ -19,28 +62,28 @@ class CovidTest():
         if (question != 'yes' and question != 'no'):
             print("I apologize, I don't understand.\nReturning to the menu...")
             time.sleep(1)
-            print("\n\n\n\n\n")
+            self.cleanScreen()
             pass
         engine.declare(Option(q1 = question))
         engine.run()
-        
-    def menu(self):
+
+    def consultInfo(self, invalidValue):
         stay = True
         while(stay):
-            print("\n==== Welcome to the Corona Virus Detector ===\n")
-            print("Please choose a valid option: ")
-            print("1. Start test")
-            print("2. Information about the Coronavirus Cases in México")
-            print("3. Exit")
-            self.apicovid.getInfo("Mexico")
-            print("============================================")
-            opt = int(input(">>> "))
-            if(opt == 1):
-                self.startEngine()
-            elif(opt == 2):
-                print("something")
-            elif(opt == 3):
-                print("See you later!")
+            try:
+                country = input("Please capture the name of the country: ")
                 stay = False
-            else:
-                print("--> Please enter a valid value")
+                self.apicovid.getInfo(country)
+                input("Enter to continue...")
+            except:
+                print(invalidValue)
+        self.cleanScreen()
+
+    def consultWorldWide(self):
+        print(yellow + "============================================" + RESET)
+        print(cyan + "Worldwide cases: " + RESET + str(self.globalStats['TotalCases']))
+        print(cyan +"Worldwide deaths: " + RESET + str(self.globalStats['GlobalDeaths']))
+        print(cyan +"Worldwide recoverements: " + RESET + str(self.globalStats['GlobalRecovered']))
+        print(yellow + "============================================" + RESET)
+        self.enterToContinue()
+        self.cleanScreen()

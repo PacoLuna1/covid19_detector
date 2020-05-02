@@ -2,7 +2,6 @@ from experta import *
 import time
 
 class Option(Fact):
-    """Info about the COVID19"""
     pass
 
 pointsCov = 0
@@ -16,17 +15,12 @@ class Detector(KnowledgeEngine):
         global pointsCov, pointsExtra, older
         if (answer == 'yes' and typeQuestion == 0):
             pointsCov = pointsCov + 1
-            print(pointsCov)
-            print(pointsExtra)
         else:
             if (answer == 'yes' and typeQuestion == 1):
                 pointsExtra = pointsExtra + 1
-                print(pointsCov)
-                print(pointsExtra)
             else:
                 if (answer == 'yes' and typeQuestion == 2):
                     older = 1
-                    print(older)
 
     #Return global variables values
     def returnValues(self, typeValue):

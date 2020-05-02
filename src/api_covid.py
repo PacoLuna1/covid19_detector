@@ -1,14 +1,9 @@
 import requests as request, json
+from src.colors import *
 
 class APICOVID():
     def __init__(self):
-        self.name ="APICOVID"
-
-    def getInfo(self, country):
-        stats = self.getStats()
-        globalStats = self.getGlobalStats()
-        indexCountry = self.getIndexOfCountry(globalStats['Summary'], country)
-        print(globalStats['TotalCases'], globalStats[ 'GlobalRecovered'], globalStats['GlobalDeaths'])
+        self.name ='APICOVID'
 
     def getStats(self):
         stats = request.get('https://api.covid19api.com/stats')
@@ -29,8 +24,18 @@ class APICOVID():
                     'TotalCases': totalCases,
                     'GlobalDeaths': totalDeaths,
                     'GlobalRecovered': totalRecovered,
-                    'Summary': summaryGlobal
                    }
+        else:
+            return None
+
+    def getGlobalSummary(self):
+        summary = request.get('https://api.covid19api.com/summary')
+        if (summary.status_code == 200):
+            summaryGlobal = summary.json()
+            totalDeaths = summaryGlobal['Global']['TotalDeaths']
+            totalRecovered = summaryGlobal['Global']['TotalRecovered']
+            totalCases = totalDeaths + totalRecovered
+            return summaryGlobal
         else:
             return None
 
@@ -46,5 +51,18 @@ class APICOVID():
 
         return None
 
-    def getStatsOfCountry(self,globalStats, index):
-        return globalStats['Summary']['Countries'][index]
+    def getStatsOfCountry(self,stats, index):
+        return stats['Countries'][index]
+
+    def printStats(self, statsCountry):
+        print(blue + '----------------------------' + RESET)
+        for property in statsCountry:
+            print(cyan + property + ": " + RESET + str(statsCountry[property]) )
+        print(blue + '----------------------------' + RESET)
+
+    def getInfo(self, country):
+        stats = self.getStats()
+        globalSummary = self.getGlobalSummary()
+        indexCountry = self.getIndexOfCountry(globalSummary, country)
+        statsCountry = self.getStatsOfCountry(globalSummary, indexCountry)
+        self.printStats(statsCountry)
