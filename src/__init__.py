@@ -1,5 +1,6 @@
 # coding=utf-8
 #!/usr/bin/python
+import time
 import os
 import colorama
 

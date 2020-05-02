@@ -56,10 +56,16 @@ class CovidTest():
     def startEngine(self):
         engine = Detector()
         engine.reset()
-        print("Test to know if the user is infected with Covid-19")
-        engine.declare(Option(symptom=input("Which is your first symptom? : ")))
+        print("Test to know if the user is infected with Covid-19\n")
+        #QUESTION 1
+        question = str(input("Have you had direct contact with any covid-19 positive case? \n[yes] [no]\nAnswer >> ").lower())
+        if (question != 'yes' and question != 'no'):
+            print("I apologize, I don't understand.\nReturning to the menu...")
+            time.sleep(1)
+            self.cleanScreen()
+            pass
+        engine.declare(Option(q1 = question))
         engine.run()
-        self.cleanScreen()
 
     def consultInfo(self, invalidValue):
         stay = True
